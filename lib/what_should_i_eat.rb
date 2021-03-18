@@ -1,18 +1,17 @@
 # frozen_string_literal: true
 
-require_relative "what_should_i_eat/version"
+require_relative "what_should_i_eat/printing"
+require "http"
+require "JSON"
 
 module WhatShouldIEat
-  class Error < StandardError; end
   
-  require "http"
+  
   result = HTTP.get('https://www.edamam.com/search?type=Feeds').to_s
-
   recipes = JSON.parse(result)
+  name = recipes.first['items'].first['label']
+  url  = recipes.first['items'].first['url']
+  Printing.print name, url
+  end
 
-  puts "For tonight's dinner we shall have #{recipes.first['items'].first['label']}"
-  puts "Find the recipe at #{recipes.first['items'].first['url']}"
 
-
-
-end
